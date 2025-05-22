@@ -204,6 +204,9 @@ class XGBoost_Regression_Framework:
         return study.best_params 
 
     def GetXGBParams(self):
+        """
+        Gives information about xgboost parameters.
+        """
         import json
 
         xgboost_regressor_params = {
