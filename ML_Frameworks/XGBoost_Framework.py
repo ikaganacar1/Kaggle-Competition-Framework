@@ -203,3 +203,162 @@ class XGBoost_Regression_Framework:
         
         return study.best_params 
 
+    def GetXGBParams(self):
+        import json
+
+        xgboost_regressor_params = {
+            # ================= Global Configuration =================
+            'verbosity': {
+                'description': 'Controls verbosity of output messages',
+                'default': 1,
+                'options': [0, 1, 2, 3]
+            },
+            'nthread': {
+                'description': 'Number of parallel threads',
+                'default': 'Available cores',
+                'range': [1, 'inf']
+            },
+            'use_rmm': {
+                'description': 'Use RAPIDS Memory Manager (GPU only)',
+                'default': False,
+                'options': [True, False]
+            },
+
+            # ================ General Parameters ================
+            'booster': {
+                'description': 'Type of booster',
+                'default': 'gbtree',
+                'options': ['gbtree', 'dart', 'gblinear']
+            },
+            'device': {
+                'description': 'Compute device',
+                'default': 'cpu',
+                'options': ['cpu', 'cuda', 'gpu']
+            },
+            'validate_parameters': {
+                'description': 'Enable parameter validation',
+                'default': True
+            },
+
+            # ============== Tree Booster Parameters ==============
+            'eta': {
+                'description': 'Learning rate',
+                'default': 0.3,
+                'range': [0, 1]
+            },
+            'gamma': {
+                'description': 'Minimum loss reduction for split',
+                'default': 0,
+                'range': [0, 'inf']
+            },
+            'max_depth': {
+                'description': 'Maximum tree depth',
+                'default': 6,
+                'range': [0, 'inf']
+            },
+            'sampling_method': {
+                'description': 'Sampling technique',
+                'default': 'uniform',
+                'options': ['uniform', 'gradient_based']
+            },
+            'grow_policy': {
+                'description': 'Tree growth strategy',
+                'default': 'depthwise',
+                'options': ['depthwise', 'lossguide']
+            },
+            'monotone_constraints': {
+                'description': 'Feature monotonicity constraints',
+                'default': None
+            },
+            'interaction_constraints': {
+                'description': 'Allowed feature interactions',
+                'default': None
+            },
+
+            # ============== Dart Booster Parameters ==============
+            'sample_type': {
+                'description': 'DART sampling method',
+                'default': 'uniform',
+                'options': ['uniform', 'weighted']
+            },
+            'rate_drop': {
+                'description': 'Dropout rate for DART',
+                'default': 0.0,
+                'range': [0, 1]
+            },
+            'skip_drop': {
+                'description': 'Probability to skip dropout',
+                'default': 0.0,
+                'range': [0, 1]
+            },
+
+            # ============ Categorical Features ============
+            'max_cat_to_onehot': {
+                'description': 'Threshold for one-hot encoding',
+                'default': 4,
+                'range': [1, 'inf']
+            },
+            'max_cat_threshold': {
+                'description': 'Max categories per split',
+                'default': 32,
+                'range': [1, 'inf']
+            },
+
+            # ============== Learning Task Parameters ==============
+            'objective': {
+                'description': 'Regression objectives',
+                'default': 'reg:squarederror',
+                'options': [
+                    'reg:squarederror',
+                    'reg:squaredlogerror',
+                    'reg:pseudohubererror',
+                    'reg:quantileerror',
+                    'reg:tweedie',
+                    'survival:aft'
+                ]
+            },
+            'tweedie_variance_power': {
+                'description': 'Tweedie distribution parameter',
+                'default': 1.5,
+                'range': (1, 2)
+            },
+            'quantile_alpha': {
+                'description': 'Quantile regression targets',
+                'default': 0.5,
+                'range': [0, 1]
+            },
+            'aft_loss_distribution': {
+                'description': 'AFT survival distribution',
+                'options': ['normal', 'logistic', 'extreme']
+            },
+
+            # ============== Advanced Regularization ==============
+            'lambda': {
+                'description': 'L2 regularization',
+                'default': 1,
+                'range': [0, 'inf']
+            },
+            'alpha': {
+                'description': 'L1 regularization',
+                'default': 0,
+                'range': [0, 'inf']
+            },
+            'max_delta_step': {
+                'description': 'Maximum tree output delta',
+                'default': 0,
+                'range': [0, 'inf']
+            },
+
+            # ============== Experimental Features ==============
+            'multi_strategy': {
+                'description': 'Multi-target strategy',
+                'default': 'one_output_per_tree',
+                'options': ['one_output_per_tree', 'multi_output_tree']
+            },
+            'enable_categorical': {
+                'description': 'Enable categorical support',
+                'default': False,
+                'options': [True, False]
+            }
+        }
+        return json.dumps(xgboost_regressor_params, indent=2, sort_keys=True)
